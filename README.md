@@ -1,2 +1,2 @@
 # inv-friend
-invisible friend / secret santa
+invisible friend / secret santa project
