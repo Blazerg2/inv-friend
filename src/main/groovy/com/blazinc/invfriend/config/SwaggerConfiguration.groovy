@@ -1,4 +1,4 @@
-package com.blazerg.application.pokevleague.config
+package com.blazinc.invfriend.config
 
 import io.swagger.annotations.Api
 import org.springframework.context.annotation.Bean
@@ -27,16 +27,16 @@ class SwaggerConfiguration {
     @Bean
     Docket customImplementation() {
         return new Docket(DocumentationType.SWAGGER_2)
-            .groupName('poke-vleague')
-            .apiInfo(apiInfo())
-            .ignoredParameterTypes(MetaClass)
-            .select()
-            .apis(RequestHandlerSelectors.withClassAnnotation(Api))
-            .paths(PathSelectors.any())
-            .build()
-            .pathMapping('/')
-            .genericModelSubstitutes(ResponseEntity)
-            .useDefaultResponseMessages(false)
+                .groupName('testapi')
+                .apiInfo(apiInfo())
+                .ignoredParameterTypes(MetaClass)
+                .select()
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api))
+                .paths(PathSelectors.any())
+                .build()
+                .pathMapping('/')
+                .genericModelSubstitutes(ResponseEntity)
+                .useDefaultResponseMessages(false)
     }
 
     /**
@@ -46,13 +46,10 @@ class SwaggerConfiguration {
      */
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title('Poke virtual league')
-            .description('Just a project for practicing heroku integration with spring boot')
-            .license('Blazerg')
-            .licenseUrl('https://github.com/Blazerg2/')
-            .termsOfServiceUrl('')
-            .version('1.0.0')
-            .build()
+                .title('inv friend code test project')
+                .description('secret santa bot for telegram')
+                .version('1.0.0')
+                .build()
     }
 
 }
