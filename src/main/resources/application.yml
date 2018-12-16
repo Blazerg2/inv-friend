@@ -1,0 +1,5 @@
+spring:
+  data:
+    mongodb:
+      database: test
+      uri: mongodb+srv://developer:JtrKa5w7lvF4AVls@hakivision-ptrcy.mongodb.net/test?retryWrites=true
