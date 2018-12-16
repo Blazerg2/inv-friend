@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UserRepository extends MongoRepository<User, String> {
 
+    List<User> findByGroup(String group)
 }
