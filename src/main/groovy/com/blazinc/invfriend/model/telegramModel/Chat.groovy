@@ -1,4 +1,4 @@
-package com.blazerg.application.pokevleague.model.telegramModel
+package com.blazinc.invfriend.model.telegramModel
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import groovy.transform.Canonical

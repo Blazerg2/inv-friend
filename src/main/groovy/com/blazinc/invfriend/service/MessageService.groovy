@@ -1,4 +1,4 @@
-package com.blazerg.application.pokevleague.service
+package com.blazinc.invfriend.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.env.Environment

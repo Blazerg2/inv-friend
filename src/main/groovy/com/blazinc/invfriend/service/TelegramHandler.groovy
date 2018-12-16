@@ -1,9 +1,18 @@
+package com.blazinc.invfriend.service
+
+import com.blazinc.invfriend.model.telegramModel.Update
+import groovy.util.logging.Log
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 
 @Log
 @Service
-class TelegramHandlerService {
+class TelegramHandler {
 
- private static final def destinCodes = ["getHelp"]
+    @Autowired
+    MessageService messageService
+
+    private static final def destinCodes = ["getHelp"]
 
     void messageReceiver(String message, Update params) {
         if (destinCodes.contains(message)) {
