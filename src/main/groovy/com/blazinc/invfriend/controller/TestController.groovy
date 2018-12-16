@@ -21,7 +21,8 @@ class TestController {
             @ApiResponse(code = 200, message = 'Successful operation'),
     ])
 
-    @GetMapping(value = '/isAlive'){
+    @GetMapping(value = '/isAlive')
+    String isAlive(){
         'Hello world, I am alive!!!!!!'
     }
 }
