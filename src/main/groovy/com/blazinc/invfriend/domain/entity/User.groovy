@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document
  * Entity partner class
  */
 @Canonical
-@Document(collection = 'partner')
+@Document(collection = 'user')
 class User {
 
     @Id
