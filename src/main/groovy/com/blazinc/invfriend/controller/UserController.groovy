@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @Api(value = 'partners', description = 'Just a custom api to document the secret santa telegram project')
 @RestController()
-class TestController {
+class UserController {
 
     @ApiOperation(
             notes = 'Method used to get all partners',
@@ -24,5 +24,15 @@ class TestController {
     @GetMapping(value = '/isAlive')
     String isAlive(){
         'Hello world, I am alive!!!!!!'
+    }
+
+    @RequestMapping(value = "/webhook", method = RequestMethod.POST)
+    void webhook(@RequestBody Update update) {
+        String inputMessage = update?.message?.text
+
+        log.info("message received $inputMessage")
+        log.info("$update")
+
+        this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
     }
 }
