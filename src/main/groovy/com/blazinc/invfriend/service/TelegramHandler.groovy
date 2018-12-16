@@ -1,5 +1,7 @@
 package com.blazinc.invfriend.service
 
+import com.blazinc.invfriend.domain.entity.User
+import com.blazinc.invfriend.domain.repository.UserRepository
 import com.blazinc.invfriend.model.telegramModel.Update
 import groovy.util.logging.Log
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,7 +14,10 @@ class TelegramHandler {
     @Autowired
     MessageService messageService
 
-    private static final def destinCodes = ["getHelp"]
+    @Autowired
+    UserRepository userRepository
+
+    private static final def destinCodes = ['getHelp', 'join']
 
     void messageReceiver(String message, Update params) {
         if (destinCodes.contains(message)) {
@@ -24,5 +29,10 @@ class TelegramHandler {
     void getHelpReceived(Update params) {
         String chatId = params?.message?.getChat()?.getId()
         this.messageService.sendNotificationToTelegram('help for this bot is not enable yet', chatId)
+    }
+
+    void joinReceived(Update params){
+        User user = new User(userName: params?.message?.from?.first_name, group: params?.message?.chat?.title)
+        userRepository.save(user)
     }
 }
