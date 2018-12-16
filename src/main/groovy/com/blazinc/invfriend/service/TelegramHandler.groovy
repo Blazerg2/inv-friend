@@ -32,7 +32,12 @@ class TelegramHandler {
     }
 
     void joinReceived(Update params){
+        String chatId = params?.message?.getChat()?.getId()
+
         User user = new User(userName: params?.message?.from?.first_name, group: params?.message?.chat?.title)
         userRepository.save(user)
+
+        this.messageService.sendNotificationToTelegram('User added', chatId)
+
     }
 }
