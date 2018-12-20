@@ -24,15 +24,25 @@ class TelegramHandler {
 
     void messageReceiver(String message, Update params) {
         message = message - '@invFriendBot'
-        if (destinCodes.contains(message)) {
+        Boolean commandIsMessage = checkForMessageCommand(params, message)
+
+        if (!commandIsMessage && destinCodes.contains(message)) {
             chatId = params?.message?.getChat()?.getId()
             String methodName = message + "Received"
             invokeMethod(methodName, params)
         }
     }
 
+    Boolean checkForMessageCommand(Update params, String message) {
+        if (message?.substring(0, 7) == 'message') {
+            messageReceived(params, message?.substring(7))
+            return true
+        }
+        false
+    }
+
     void gethelpReceived(Update params) {
-        this.messageService.sendNotificationToTelegram('help for this bot is not enabled yet', chatId)
+        this.messageService.sendNotificationToTelegram("Available commands $destinCodes", chatId)
     }
 
     void joinReceived(Update params) {
@@ -97,13 +107,13 @@ class TelegramHandler {
         this.messageService.sendNotificationToTelegram("$names ", chatId)
     }
 
-    void messageReceived(Update params) {
+    void messageReceived(Update params, String message) {
         if (params?.message?.chat?.type != 'private') {
             this.messageService.sendNotificationToTelegram("You can contact your invisible friend but the /message command must be sent through a private message to me", chatId)
         } else {
             User origin = userRepository.findByChatId(params?.message?.from?.id as String)
             if (origin?.partner) {
-                this.messageService.sendNotificationToTelegram(params?.message?.text - '/message', origin?.partner?.chatId)
+                this.messageService.sendNotificationToTelegram(message, origin?.partner?.chatId)
             } else {
                 this.messageService.sendNotificationToTelegram("You don't have a secret santa", origin?.chatId)
             }
