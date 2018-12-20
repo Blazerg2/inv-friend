@@ -1,5 +1,6 @@
 package com.blazinc.invfriend.domain.entity
 
+import com.blazinc.invfriend.model.Partner
 import groovy.transform.Canonical
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -17,4 +18,5 @@ class User {
     String group
     String chatId
     Boolean verified
+    Partner partner
 }

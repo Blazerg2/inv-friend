@@ -2,6 +2,7 @@ package com.blazinc.invfriend.service
 
 import com.blazinc.invfriend.domain.entity.User
 import com.blazinc.invfriend.domain.repository.UserRepository
+import com.blazinc.invfriend.model.Partner
 import com.blazinc.invfriend.model.telegramModel.Update
 
 import groovy.util.logging.Log
@@ -75,12 +76,12 @@ class TelegramHandler {
                     Collections.shuffle(users2)
                 } else {
                     this.messageService.sendNotificationToTelegram("your present goes to ${users2[0]?.userName} ", element?.chatId)
+                    element?.partner = new Partner(first_name: users2[0]?.userName, chatId: users2[0]?.chatId)
                     log.info("a ${element?.userName} le corresponde regalar a ${users2[0]?.userName}")
                     users2?.remove(0)
                     worked = true
                 }
             }
-
         }
     }
 
