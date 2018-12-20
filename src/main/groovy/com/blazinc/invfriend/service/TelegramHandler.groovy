@@ -103,7 +103,7 @@ class TelegramHandler {
         } else {
             User origin = userRepository.findByChatId(params?.message?.from?.id as String)
             if (origin?.partner) {
-                this.messageService.sendNotificationToTelegram(params?.message?.text, origin?.partner?.chatId)
+                this.messageService.sendNotificationToTelegram(params?.message?.text - '/message', origin?.partner?.chatId)
             } else {
                 this.messageService.sendNotificationToTelegram("You don't have a secret santa", origin?.chatId)
             }
