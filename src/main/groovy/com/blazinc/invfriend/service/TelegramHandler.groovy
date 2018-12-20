@@ -35,10 +35,14 @@ class TelegramHandler {
     }
 
     void joinReceived(Update params) {
-        User user = new User(userName: params?.message?.from?.first_name, group: params?.message?.chat?.title)
-        userRepository.save(user)
-//todo check if user already exist
-        this.messageService.sendNotificationToTelegram('User added', chatId)
+        User storedUser = userRepository.findByChatId(params?.message?.from?.id as String)
+        if (storedUser && storedUser?.verified) {
+            storedUser.group = params?.message?.chat?.title
+            userRepository.save(storedUser)
+            this.messageService.sendNotificationToTelegram("$storedUser.userName is now participating on the secret santa!", chatId)
+        } else {
+            this.messageService.sendNotificationToTelegram("$storedUser.userName, in order to join the secret santa you must send me a private message with /start first!", chatId)
+        }
     }
 
     void startReceived(Update params) {
