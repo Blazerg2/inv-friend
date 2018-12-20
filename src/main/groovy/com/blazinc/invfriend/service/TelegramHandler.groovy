@@ -20,6 +20,7 @@ class TelegramHandler {
     private static final def destinCodes = ['gethelp', 'join', 'start']
 
     void messageReceiver(String message, Update params) {
+        message = message - '@invFriendBot'
         if (destinCodes.contains(message)) {
             String methodName = message + "Received"
             invokeMethod(methodName, params)
