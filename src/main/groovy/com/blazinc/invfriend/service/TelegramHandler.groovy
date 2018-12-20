@@ -43,20 +43,22 @@ class TelegramHandler {
     void startReceived(Update params) {
         String chatId = params?.message?.from?.id
 
-        List<User> users = userRepository.findByGroup(params?.message?.chat?.title)
-        List<User> users2 = users.clone() as List<User>
-        Collections.shuffle(users2)
+//        List<User> users = userRepository.findByGroup(params?.message?.chat?.title)
+//        List<User> users2 = users.clone() as List<User>
+//        Collections.shuffle(users2)
+//
+//        def prueba = []
+//        //TODO fix this shit and start command name change
+//        users?.each {
+//            String partner = users2[0].userName
+//            if (partner == it.userName) {
+//                partner = users2[1].userName
+//                users2.remove(1)
+//            } else {
+//                users2.remove(0)
+//            }
 
-        users?.each {
-            String partner = users2[0].userName
-            if (partner == it.userName) {
-                partner = users2[1].userName
-                users2.remove(1)
-            } else {
-                users2.remove(0)
-            }
-
-            this.messageService.sendNotificationToTelegram("your present goes to $partner", chatId)
-        }
+            this.messageService.sendNotificationToTelegram("your present goes to Paco", chatId)
+//        }
     }
 }
