@@ -16,4 +16,5 @@ class User {
     String userName
     String group
     String chatId
+    Boolean verified
 }
