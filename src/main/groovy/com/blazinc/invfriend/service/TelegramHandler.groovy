@@ -42,27 +42,16 @@ class TelegramHandler {
     }
 
     void startReceived(Update params) {
-        //TODO start debe registrar al usuario y comprobar que venga del bot el mensaje
-        User user = new User(
-                userName: params?.message?.from?.first_name, chatId: params?.message?.from?.id, verified: true
-        )
-//        List<User> users = userRepository.findByGroup(params?.message?.chat?.title)
-//        List<User> users2 = users.clone() as List<User>
-//        Collections.shuffle(users2)
-//
-//        def prueba = []
-//        //TODO fix this shit and start command name change
-//        users?.each {
-//            String partner = users2[0].userName
-//            if (partner == it.userName) {
-//                partner = users2[1].userName
-//                users2.remove(1)
-//            } else {
-//                users2.remove(0)
-//            }
+        String userId = params?.message?.from?.id
 
-        this.messageService.sendNotificationToTelegram("your present goes to Paco", chatId)
-//        }
+        if (params?.message?.chat?.type != 'private') {
+            this.messageService.sendNotificationToTelegram("You must send a private message to the bot with /start in order to start the bot", chatId)
+        } else {
+            if (!userRepository.findByChatId(userId)) {
+                User user = new User(userName: params?.message?.from?.first_name, chatId: userId, verified: true)
+            }
+            this.messageService.sendNotificationToTelegram("Greetings!, use /getHelp to know more about the bot", chatId)
+        }
     }
 
     void santatimeReceived(Update params) {
@@ -76,6 +65,7 @@ class TelegramHandler {
             Boolean worked = false
 
             while (!worked) {
+
                 if (element?.id == users2[0]?.id) {
                     Collections.shuffle(users2)
                 } else {

@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository
 interface UserRepository extends MongoRepository<User, String> {
 
     List<User> findByGroup(String group)
+
+    User findByChatId(String chatId)
 }
