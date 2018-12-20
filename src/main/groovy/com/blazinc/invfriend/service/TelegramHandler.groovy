@@ -49,6 +49,7 @@ class TelegramHandler {
         } else {
             if (!userRepository.findByChatId(userId)) {
                 User user = new User(userName: params?.message?.from?.first_name, chatId: userId, verified: true)
+                userRepository.save(user)
             }
             this.messageService.sendNotificationToTelegram("Greetings!, use /getHelp to know more about the bot", chatId)
         }
