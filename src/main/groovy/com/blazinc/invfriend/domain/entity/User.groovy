@@ -15,4 +15,5 @@ class User {
     String id
     String userName
     String group
+    String chatId
 }

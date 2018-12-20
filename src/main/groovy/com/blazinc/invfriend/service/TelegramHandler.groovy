@@ -17,24 +17,23 @@ class TelegramHandler {
     @Autowired
     UserRepository userRepository
 
-    private static final def destinCodes = ['gethelp', 'join', 'start']
+    private static final def destinCodes = ['gethelp', 'join', 'start', 'santatime']
+    private String chatId
 
     void messageReceiver(String message, Update params) {
         message = message - '@invFriendBot'
         if (destinCodes.contains(message)) {
+            chatId = params?.message?.getChat()?.getId()
             String methodName = message + "Received"
             invokeMethod(methodName, params)
         }
     }
 
     void gethelpReceived(Update params) {
-        String chatId = params?.message?.getChat()?.getId()
         this.messageService.sendNotificationToTelegram('help for this bot is not enabled yet', chatId)
     }
 
     void joinReceived(Update params) {
-        String chatId = params?.message?.getChat()?.getId()
-
         User user = new User(userName: params?.message?.from?.first_name, group: params?.message?.chat?.title)
         userRepository.save(user)
 
@@ -42,8 +41,7 @@ class TelegramHandler {
     }
 
     void startReceived(Update params) {
-        String chatId = params?.message?.from?.id
-
+        //TODO start debe registrar al usuario y comprobar que venga del bot el mensaje
 //        List<User> users = userRepository.findByGroup(params?.message?.chat?.title)
 //        List<User> users2 = users.clone() as List<User>
 //        Collections.shuffle(users2)
@@ -59,7 +57,31 @@ class TelegramHandler {
 //                users2.remove(0)
 //            }
 
-            this.messageService.sendNotificationToTelegram("your present goes to Paco", chatId)
+        this.messageService.sendNotificationToTelegram("your present goes to Paco", chatId)
 //        }
     }
+
+    void santatimeReceived(Update params, String chatId) {
+        List<User> users = userRepository.findByGroup(params?.message?.chat?.title)
+        Collections.shuffle(users)
+        Boolean last = false
+        int counter = 0
+        if (users?.size() % 2 == 0) {
+            while (!last) {
+                User user = users[counter]
+                User partner = users[counter + 1]
+                this.messageService.sendNotificationToTelegram("your present goes to ${partner?.userName} ", user?.chatId)
+                this.messageService.sendNotificationToTelegram("your present goes to ${user?.userName}", partner?.chatId)
+
+                if (partner?.id == users?.last()?.id)
+                    last = true
+            }
+        }else {
+            this.messageService.sendNotificationToTelegram('the participants are not even', chatId)
+
+        }
+    }
+
+    //todo comando de mostrar participantes
+
 }

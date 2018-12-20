@@ -19,6 +19,7 @@ class GlobalExceptionHandler {
     /**
      * this method catches every exception to send a custom error json response
      */
+    //tODO FIX THIS check for 403
     @ExceptionHandler(Exception)
     @ResponseStatus(code = HttpStatus.OK, reason = 'invalid command')
     void everyException(Exception e) {
