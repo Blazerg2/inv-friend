@@ -71,17 +71,15 @@ class TelegramHandler {
         List<User> users2 = users.clone() as List<User>
 
         Collections.shuffle(users2)
-        Boolean worked = false
 
         users?.eachWithIndex { element, index ->
-            println element
-            println index
+            Boolean worked = false
 
             while (!worked) {
                 if (element?.id == users2[0]?.id) {
                     Collections.shuffle(users2)
                 } else {
-                   // this.messageService.sendNotificationToTelegram("your present goes to ${users2[0]?.userName} ", users2[0]?.chatId)
+                    this.messageService.sendNotificationToTelegram("your present goes to ${users2[0]?.userName} ", users2[0]?.chatId)
                     log.info("a ${element?.userName} le corresponde regalar a ${users2[0]?.userName}")
                     users2?.remove(0)
                     worked = true
