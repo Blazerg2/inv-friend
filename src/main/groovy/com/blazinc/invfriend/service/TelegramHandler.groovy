@@ -41,7 +41,7 @@ class TelegramHandler {
             userRepository.save(storedUser)
             this.messageService.sendNotificationToTelegram("$storedUser.userName is now participating on the secret santa!", chatId)
         } else {
-            this.messageService.sendNotificationToTelegram("$storedUser.userName, in order to join the secret santa you must send me a private message with /start first!", chatId)
+            this.messageService.sendNotificationToTelegram("${params?.message?.from?.first_name}, in order to join the secret santa you must send me a private message with /start first!", chatId)
         }
     }
 
