@@ -34,7 +34,7 @@ class TelegramHandler {
     }
 
     Boolean checkForMessageCommand(Update params, String message) {
-        if (message?.substring(0, 7) == 'message') {
+        if (message?.size() > 7 && message?.substring(0, 7) == 'message') {
             messageReceived(params, message?.substring(7))
             return true
         }
