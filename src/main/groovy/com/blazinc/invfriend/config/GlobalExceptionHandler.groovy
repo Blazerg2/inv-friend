@@ -23,7 +23,9 @@ class GlobalExceptionHandler {
     @ExceptionHandler(Exception)
     @ResponseStatus(code = HttpStatus.OK, reason = 'invalid command')
     void everyException(Exception e) {
-        log.info('INVALID COMMAND RECEIVED')
+        log.info("INVALID COMMAND RECEIVED $e.message")
+        log.info('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+        log.info("$e.stackTrace")
     }
 
 //    /**
