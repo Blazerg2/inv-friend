@@ -20,7 +20,7 @@ class GlobalExceptionHandler {
      * this method catches every exception to send a custom error json response
      */
     @ExceptionHandler(Exception)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = 'invalid command')
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = 'invalid command')
     void everyException(Exception e) {
         log.info('INVALID COMMAND RECEIVED')
     }
