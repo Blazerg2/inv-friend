@@ -83,6 +83,7 @@ class TelegramHandler {
                 }
             }
         }
+        userRepository.saveAll(users)
     }
 
     void participantsReceived(Update params) {
