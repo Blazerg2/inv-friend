@@ -17,7 +17,7 @@ class TelegramHandler {
     @Autowired
     UserRepository userRepository
 
-    private static final def destinCodes = ['getHelp', 'join', 'start']
+    private static final def destinCodes = ['gethelp', 'join', 'start']
 
     void messageReceiver(String message, Update params) {
         if (destinCodes.contains(message)) {
@@ -28,7 +28,7 @@ class TelegramHandler {
         }
     }
 
-    void getHelpReceived(Update params) {
+    void gethelpReceived(Update params) {
         String chatId = params?.message?.getChat()?.getId()
         this.messageService.sendNotificationToTelegram('help for this bot is not enabled yet', chatId)
     }
