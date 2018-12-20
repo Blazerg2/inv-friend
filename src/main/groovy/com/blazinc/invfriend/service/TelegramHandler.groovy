@@ -19,7 +19,7 @@ class TelegramHandler {
     @Autowired
     UserRepository userRepository
 
-    private static final def destinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants']
+    private static final def destinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants', 'message']
     private String chatId
 
     void messageReceiver(String message, Update params) {
@@ -95,5 +95,18 @@ class TelegramHandler {
             }
         }
         this.messageService.sendNotificationToTelegram("$names ", chatId)
+    }
+
+    void messageReceived(Update params) {
+        if (params?.message?.chat?.type != 'private') {
+            this.messageService.sendNotificationToTelegram("You can contact your invisible friend but the /message command must be sent through a private message to me", chatId)
+        } else {
+            User origin = userRepository.findByChatId(params?.message?.from?.id as String)
+            if (origin?.partner) {
+                this.messageService.sendNotificationToTelegram(params?.message?.text, origin?.partner?.chatId)
+            } else {
+                this.messageService.sendNotificationToTelegram("You don't have a secret santa", origin?.chatId)
+            }
+        }
     }
 }
