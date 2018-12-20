@@ -112,10 +112,10 @@ class TelegramHandler {
             this.messageService.sendNotificationToTelegram("You can contact your invisible friend but the /message command must be sent through a private message to me", chatId)
         } else {
             User origin = userRepository.findByChatId(params?.message?.from?.id as String)
-            if (origin?.partner && message){
+            if (origin?.partner && message) {
                 this.messageService.sendNotificationToTelegram(message, origin?.partner?.chatId)
             } else {
-                this.messageService.sendNotificationToTelegram("You don't have a secret santa or you are not sending a correct message", origin?.chatId)
+                this.messageService.sendNotificationToTelegram("You don't have a secret santa or you are not sending a correct message", params?.message?.from?.id as String)
             }
         }
     }
