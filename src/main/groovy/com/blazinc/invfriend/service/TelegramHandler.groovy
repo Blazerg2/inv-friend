@@ -18,7 +18,7 @@ class TelegramHandler {
     @Autowired
     UserRepository userRepository
 
-    private static final def destinCodes = ['gethelp', 'join', 'start', 'santatime']
+    private static final def destinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants']
     private String chatId
 
     void messageReceiver(String message, Update params) {
@@ -83,5 +83,15 @@ class TelegramHandler {
 
         }
     }
-    //todo comando de mostrar participantes
+
+    void participantsReceived(Update params) {
+        List<User> users = userRepository.findByGroup(params?.message?.chat?.title)
+        List<String> names = new ArrayList<String>()
+        if (users) {
+            users.each {
+                names << it.userName
+            }
+        }
+        this.messageService.sendNotificationToTelegram("$names ", chatId)
+    }
 }
