@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.view.RedirectView
+import springfox.documentation.annotations.ApiIgnore
 
 @Log
 @Api(value = 'partners', description = 'Just a custom api to document the secret santa telegram project')
@@ -45,5 +47,11 @@ class UserController {
         log.info("$update")
 
         this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
+    }
+
+    @ApiIgnore
+    @GetMapping(value = '/')
+    RedirectView emptyUrlRedirect() {
+        return new RedirectView('http://localhost:8080/swagger-ui.html')
     }
 }
