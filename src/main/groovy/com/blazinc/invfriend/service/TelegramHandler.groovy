@@ -23,8 +23,6 @@ class TelegramHandler {
         if (destinCodes.contains(message)) {
             String methodName = message + "Received"
             invokeMethod(methodName, params)
-        }else{
-            throw new Exception()
         }
     }
 
