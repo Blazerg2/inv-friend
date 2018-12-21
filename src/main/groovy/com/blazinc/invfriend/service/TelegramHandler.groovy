@@ -86,6 +86,9 @@ class TelegramHandler {
                     Collections.shuffle(users2)
                 } else {
                     this.messageService.sendNotificationToTelegram("your present goes to ${users2[0]?.userName} ", element?.chatId)
+                    this.messageService.sendNotificationToTelegram('You can send a secret message to the person who is going to gift you using the /message command, for example, you can send me "/message I love black shirts!"', element?.chatId)
+
+
                     element?.partner = new Partner(first_name: users2[0]?.userName, chatId: users2[0]?.chatId)
                     log.info("a ${element?.userName} le corresponde regalar a ${users2[0]?.userName}")
                     users2?.remove(0)
