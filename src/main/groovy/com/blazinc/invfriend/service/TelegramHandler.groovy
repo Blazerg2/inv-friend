@@ -21,6 +21,7 @@ class TelegramHandler {
 
 //    private static final def OLDdestinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants', 'message']
     private static final def destinCodes = ['start']
+    private static final def correctAnswers = ['2008', 'Take on me', '2018']
 
 
     private String chatId
@@ -28,6 +29,12 @@ class TelegramHandler {
     void messageReceiver(String message, Update params) {
         message = message - '@invFriendBot'
         Boolean commandIsMessage = checkForMessageCommand(params, message)
+
+        if (message in correctAnswers) {
+            User user = userRepository.findByUserName(params?.message?.from?.first_name)
+            user.question++
+            userRepository.save(user)
+        }
 
         if (!commandIsMessage && destinCodes.contains(message)) {
             chatId = params?.message?.getChat()?.getId()
@@ -82,7 +89,7 @@ class TelegramHandler {
         this.messageService.sendNotificationToTelegram("¿En qué año empezó la tlp a celebrarse en el recinto?", chatId)
 
         this.messageService.sendNotificationToTelegram("/2008", chatId)
-        this.messageService.sendNotificationToTelegram("2007", chatId)
+        this.messageService.sendNotificationToTelegram("/2007", chatId)
         this.messageService.sendNotificationToTelegram("/2009", chatId)
         this.messageService.sendNotificationToTelegram("/2006", chatId)
     }
