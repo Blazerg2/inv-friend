@@ -26,8 +26,7 @@ class TelegramHandler {
 
 //    private static final def OLDdestinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants', 'message']
     private static final def destinCodes = ['start']
-    private static final def correctAnswers = ['2008', 'Take on me', '2018']
-
+    private static final def correctAnswers = ['2008', 'Take_on_me', '2018', '2k14', 'Loulogio', '8', 'Mario', '2', '4']
 
     private String chatId
 
