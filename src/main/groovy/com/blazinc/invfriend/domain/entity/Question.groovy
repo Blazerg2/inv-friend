@@ -10,4 +10,5 @@ class Question {
     Integer questionNumber
     String questionText
     String correctAnswer
+    List<String> answers
 }

@@ -97,7 +97,7 @@ class TelegramHandler {
         User user = new User(userName: params?.message?.from?.first_name, chatId: userId, question: 0, verified: true)
         userRepository.save(user)
 
-        this.messageService.sendNotificationToTelegram("El juego comienza aquí, debes seleccionar la respuesta correcta para recibir la siguiente pregunta", chatId)
+        this.messageService.sendNotificationToTelegram("El juego comienza aquí, debes seleccionar la respuesta correcta para recibir la siguiente pregunta.", chatId)
         this.sendQuestion(user)
 
     }
@@ -105,6 +105,9 @@ class TelegramHandler {
     void sendQuestion(User user) {
         Question question = this.questionRepository.findByQuestionNumber(user?.question)
         this.messageService.sendNotificationToTelegram("${question.questionText}", chatId)
+        question?.answers?.each {
+            this.messageService.sendNotificationToTelegram("$it", chatId)
+        }
     }
 
     void santatimeReceived(Update params) {
