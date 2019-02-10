@@ -35,6 +35,8 @@ class MessageService {
         params.add("text", message)
 
         HttpEntity<LinkedMultiValueMap<String, Object>> request = new HttpEntity<>(params, headers)
+
+        //OLD 669409939:AAGAmGthNxar6bzTqn-qc0N8NS-me1xtDZM
         restTemplate.postForEntity(
                 'https://api.telegram.org/bot794682489:AAH5gp3ex-7uGWBvJwAU6Po6--6IlcJHGcA/sendMessage',
                 request, String.class

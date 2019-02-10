@@ -49,9 +49,9 @@ class UserController {
         this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
     }
 
-//    @ApiIgnore
-//    @GetMapping(value = '/')
-//    RedirectView emptyUrlRedirect() {
-//        return new RedirectView('http://localhost:8080/swagger-ui.html')
-//    }
+    @ApiIgnore
+    @GetMapping(value = '/')
+    RedirectView emptyUrlRedirect() {
+        return new RedirectView('https://inv-friend.herokuapp.com/swagger-ui.html')
+    }
 }
