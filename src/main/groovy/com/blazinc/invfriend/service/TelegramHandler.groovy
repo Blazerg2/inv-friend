@@ -45,7 +45,7 @@ class TelegramHandler {
             userRepository.save(user)
             this.messageService.sendNotificationToTelegram("¡Correcto!, siguiente pregunta: ", chatId)
             sendQuestion(userId)
-        }else if(correctAnswers.contains(message) && message == correctAnswers.last()){
+        } else if (correctAnswers.contains(message) && message == correctAnswers.last()) {
             this.messageService.sendNotificationToTelegram("Felicidades, has resuelto el acertijo, nos vemos el viernes a las cinco en la posición indicada #nvidiaoff", chatId)
             this.messageService.sendNotificationToTelegram("https://drive.google.com/open?id=1dqJRH_UZuxuanr2A-iZlA1Y_1yM7GyWk", chatId)
         }
@@ -101,14 +101,19 @@ class TelegramHandler {
 
     void startReceived(Update params) {
         String userId = params?.message?.from?.id
-        User user = new User(userName: params?.message?.from?.first_name, chatId: userId, question: 0, verified: true)
 
         if (!userRepository.findByChatId(userId)) {
-            userRepository.save(user)
+            User user = new User(userName: params?.message?.from?.first_name, chatId: userId, question: 0, verified: true)
+
+            if (!userRepository.findByChatId(userId)) {
+                userRepository.save(user)
+            }
+            this.messageService.sendNotificationToTelegram("El juego comienza aquí, debes seleccionar la respuesta correcta para recibir la siguiente pregunta.", chatId)
+            this.sendQuestion(userId)
+        } else {
+            this.messageService.sendNotificationToTelegram("'Buena suerte con el juego!", chatId)
         }
 
-        this.messageService.sendNotificationToTelegram("El juego comienza aquí, debes seleccionar la respuesta correcta para recibir la siguiente pregunta.", chatId)
-        this.sendQuestion(userId)
 
     }
 
