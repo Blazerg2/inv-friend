@@ -33,6 +33,7 @@ class TelegramHandler {
     void messageReceiver(String message, Update params) {
         message = message - '@invFriendBot'
 //        Boolean commandIsMessage = checkForMessageCommand(params, message)
+        String userId = params?.message?.from?.id
 
         log.info("X" * 30)
         log.info("${message in correctAnswers}")
@@ -42,6 +43,8 @@ class TelegramHandler {
             User user = userRepository.findByUserName(params?.message?.from?.first_name)
             user.question++
             userRepository.save(user)
+            this.messageService.sendNotificationToTelegram("¡Correcto!, siguiente pregunta: ", chatId)
+            sendQuestion(userId)
         }
 
 //OLD        if (!commandIsMessage && destinCodes.contains(message)) {
@@ -50,6 +53,9 @@ class TelegramHandler {
             chatId = params?.message?.getChat()?.getId()
             String methodName = message + "Received"
             invokeMethod(methodName, params)
+        } else {
+            this.messageService.sendNotificationToTelegram("¡incorrecto!", chatId)
+            sendQuestion(userId)
         }
     }
 
