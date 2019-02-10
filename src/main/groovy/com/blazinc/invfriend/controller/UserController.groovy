@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -50,10 +49,9 @@ class UserController {
         this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
     }
 
-    @ApiIgnore
-   // @GetMapping(value = '/')
-    @PostMapping(value = '/')
-    RedirectView emptyUrlRedirect() {
-        return new RedirectView('https://inv-friend.herokuapp.com/swagger-ui.html')
-    }
+//    @ApiIgnore
+//    @GetMapping(value = '/')
+//    RedirectView emptyUrlRedirect() {
+//        return new RedirectView('http://localhost:8080/swagger-ui.html')
+//    }
 }
