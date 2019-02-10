@@ -39,12 +39,15 @@ class TelegramHandler {
         log.info("${message in correctAnswers}")
         log.info("Y" * 30)
 
-        if (correctAnswers.contains(message)) {
+        if (correctAnswers.contains(message) && message != correctAnswers.last()) {
             User user = userRepository.findByUserName(params?.message?.from?.first_name)
             user.question++
             userRepository.save(user)
             this.messageService.sendNotificationToTelegram("¡Correcto!, siguiente pregunta: ", chatId)
             sendQuestion(userId)
+        }else if(correctAnswers.contains(message) && message == correctAnswers.last()){
+            this.messageService.sendNotificationToTelegram("Felicidades, has resuelto el acertijo, nos vemos el viernes a las cinco en la posición indicada #nvidiaoff", chatId)
+            this.messageService.sendNotificationToTelegram("https://drive.google.com/open?id=1dqJRH_UZuxuanr2A-iZlA1Y_1yM7GyWk", chatId)
         }
 
 //OLD        if (!commandIsMessage && destinCodes.contains(message)) {
