@@ -100,12 +100,12 @@ class TelegramHandler {
         }
 
         this.messageService.sendNotificationToTelegram("El juego comienza aquí, debes seleccionar la respuesta correcta para recibir la siguiente pregunta.", chatId)
-        this.sendQuestion(user)
+        this.sendQuestion(userId)
 
     }
 
-    void sendQuestion(User user) {
-        Question question = this.questionRepository.findByQuestionNumber(user?.question)
+    void sendQuestion(String userId) {
+        Question question = this.questionRepository.findByQuestionNumber(userRepository.findByChatId(userId)?.question)
         this.messageService.sendNotificationToTelegram("${question.questionText}", chatId)
         question?.answers?.each {
             this.messageService.sendNotificationToTelegram("$it", chatId)
