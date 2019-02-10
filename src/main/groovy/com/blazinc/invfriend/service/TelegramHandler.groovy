@@ -1,6 +1,8 @@
 package com.blazinc.invfriend.service
 
+import com.blazinc.invfriend.domain.entity.Question
 import com.blazinc.invfriend.domain.entity.User
+import com.blazinc.invfriend.domain.repository.QuestionRepository
 import com.blazinc.invfriend.domain.repository.UserRepository
 import com.blazinc.invfriend.model.Partner
 import com.blazinc.invfriend.model.telegramModel.Update
@@ -19,6 +21,9 @@ class TelegramHandler {
     @Autowired
     UserRepository userRepository
 
+    @Autowired
+    QuestionRepository questionRepository
+
 //    private static final def OLDdestinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants', 'message']
     private static final def destinCodes = ['start']
     private static final def correctAnswers = ['2008', 'Take on me', '2018']
@@ -36,7 +41,7 @@ class TelegramHandler {
 
         if (message in correctAnswers) {
             User user = userRepository.findByUserName(params?.message?.from?.first_name)
-            user.question ++
+            user.question++
             userRepository.save(user)
         }
 
@@ -92,14 +97,15 @@ class TelegramHandler {
         User user = new User(userName: params?.message?.from?.first_name, chatId: userId, question: 0, verified: true)
         userRepository.save(user)
 
-        this.messageService.sendNotificationToTelegram("¿En qué año empezó la tlp a celebrarse en el recinto?", chatId)
+        this.messageService.sendNotificationToTelegram("El juego comienza aquí, debes seleccionar la respuesta correcta para recibir la siguiente pregunta", chatId)
+        this.sendQuestion(user)
 
-        this.messageService.sendNotificationToTelegram("/2008", chatId)
-        this.messageService.sendNotificationToTelegram("/2007", chatId)
-        this.messageService.sendNotificationToTelegram("/2009", chatId)
-        this.messageService.sendNotificationToTelegram("/2006", chatId)
     }
 
+    void sendQuestion(User user) {
+        Question question = this.questionRepository.findByQuestionNumber(user?.question)
+        this.messageService.sendNotificationToTelegram("${question.questionText}", chatId)
+    }
 
     void santatimeReceived(Update params) {
         log.info('entramos')

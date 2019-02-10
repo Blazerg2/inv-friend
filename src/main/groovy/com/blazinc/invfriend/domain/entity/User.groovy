@@ -14,6 +14,7 @@ class User {
 
     @Id
     String id
+    Question complexQuestion
     Integer question
     String userName
     String group
