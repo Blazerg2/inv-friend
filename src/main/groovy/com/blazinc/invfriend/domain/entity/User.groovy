@@ -14,6 +14,7 @@ class User {
 
     @Id
     String id
+    Integer question
     String userName
     String group
     String chatId

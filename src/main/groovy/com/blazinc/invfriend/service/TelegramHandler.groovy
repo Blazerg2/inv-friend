@@ -19,7 +19,10 @@ class TelegramHandler {
     @Autowired
     UserRepository userRepository
 
-    private static final def destinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants', 'message']
+//    private static final def OLDdestinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants', 'message']
+    private static final def destinCodes = ['start']
+
+
     private String chatId
 
     void messageReceiver(String message, Update params) {
@@ -56,19 +59,30 @@ class TelegramHandler {
         }
     }
 
+//    void OLDstartReceived(Update params) {
+//        String userId = params?.message?.from?.id
+//
+//        if (params?.message?.chat?.type != 'private') {
+//            this.messageService.sendNotificationToTelegram("You must send a private message to the bot with /start in order to start the bot", chatId)
+//        } else {
+//            if (!userRepository.findByChatId(userId)) {
+//                User user = new User(userName: params?.message?.from?.first_name, chatId: userId, verified: true)
+//                userRepository.save(user)
+//            }
+//            this.messageService.sendNotificationToTelegram("Greetings!, use /getHelp to know more about the bot", chatId)
+//        }
+//    }
+
     void startReceived(Update params) {
         String userId = params?.message?.from?.id
 
-        if (params?.message?.chat?.type != 'private') {
-            this.messageService.sendNotificationToTelegram("You must send a private message to the bot with /start in order to start the bot", chatId)
-        } else {
-            if (!userRepository.findByChatId(userId)) {
-                User user = new User(userName: params?.message?.from?.first_name, chatId: userId, verified: true)
-                userRepository.save(user)
-            }
-            this.messageService.sendNotificationToTelegram("Greetings!, use /getHelp to know more about the bot", chatId)
-        }
+        User user = new User(userName: params?.message?.from?.first_name, chatId: userId, question: 0, verified: true)
+        userRepository.save(user)
+
+        this.messageService.sendNotificationToTelegram("¿En qué año empezó la tlp a celebrarse en el recinto?", chatId)
+
     }
+
 
     void santatimeReceived(Update params) {
         log.info('entramos')
