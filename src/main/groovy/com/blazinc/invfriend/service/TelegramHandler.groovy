@@ -39,7 +39,7 @@ class TelegramHandler {
         log.info("${message in correctAnswers}")
         log.info("Y" * 30)
 
-        if (message in correctAnswers) {
+        if (correctAnswers.contains(message)) {
             User user = userRepository.findByUserName(params?.message?.from?.first_name)
             user.question++
             userRepository.save(user)
@@ -53,7 +53,7 @@ class TelegramHandler {
             chatId = params?.message?.getChat()?.getId()
             String methodName = message + "Received"
             invokeMethod(methodName, params)
-        } else {
+        } else if (!correctAnswers.contains(message)) {
             this.messageService.sendNotificationToTelegram("¡incorrecto!", chatId)
             sendQuestion(userId)
         }
