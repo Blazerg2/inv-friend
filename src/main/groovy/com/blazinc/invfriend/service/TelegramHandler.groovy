@@ -93,9 +93,11 @@ class TelegramHandler {
 
     void startReceived(Update params) {
         String userId = params?.message?.from?.id
-
         User user = new User(userName: params?.message?.from?.first_name, chatId: userId, question: 0, verified: true)
-        userRepository.save(user)
+
+        if (!userRepository.findByChatId(userId)) {
+            userRepository.save(user)
+        }
 
         this.messageService.sendNotificationToTelegram("El juego comienza aquí, debes seleccionar la respuesta correcta para recibir la siguiente pregunta.", chatId)
         this.sendQuestion(user)
