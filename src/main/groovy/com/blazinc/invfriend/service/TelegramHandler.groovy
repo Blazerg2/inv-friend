@@ -111,7 +111,7 @@ class TelegramHandler {
             this.messageService.sendNotificationToTelegram("El juego comienza aquí, debes seleccionar la respuesta correcta para recibir la siguiente pregunta.", chatId)
             this.sendQuestion(userId)
         } else {
-            this.messageService.sendNotificationToTelegram("'Buena suerte con el juego!", chatId)
+            this.messageService.sendNotificationToTelegram("¡Buena suerte con el juego!", chatId)
         }
 
 
