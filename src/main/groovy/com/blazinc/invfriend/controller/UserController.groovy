@@ -51,7 +51,7 @@ class UserController {
     }
 
     @ApiIgnore
-    @GetMapping(value = '/')
+   // @GetMapping(value = '/')
     @PostMapping(value = '/')
     RedirectView emptyUrlRedirect() {
         return new RedirectView('https://inv-friend.herokuapp.com/swagger-ui.html')
