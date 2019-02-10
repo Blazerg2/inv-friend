@@ -32,7 +32,7 @@ class TelegramHandler {
 
         if (message in correctAnswers) {
             User user = userRepository.findByUserName(params?.message?.from?.first_name)
-            user.question++
+            user.question = 123
             userRepository.save(user)
         }
 
