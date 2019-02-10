@@ -81,6 +81,10 @@ class TelegramHandler {
 
         this.messageService.sendNotificationToTelegram("¿En qué año empezó la tlp a celebrarse en el recinto?", chatId)
 
+        this.messageService.sendNotificationToTelegram("/2008", chatId)
+        this.messageService.sendNotificationToTelegram("2007", chatId)
+        this.messageService.sendNotificationToTelegram("/2009", chatId)
+        this.messageService.sendNotificationToTelegram("/2006", chatId)
     }
 
 
