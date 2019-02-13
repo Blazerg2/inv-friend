@@ -48,6 +48,16 @@ class UserController {
 
         this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
     }
+    
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    void webhook(@RequestBody Update update) {
+        String inputMessage = update?.message?.text
+
+        log.info("message received $inputMessage")
+        log.info("$update")
+
+        this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
+    }
 
 //    @ApiIgnore
 //    @GetMapping(value = '/')
