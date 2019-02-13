@@ -50,7 +50,7 @@ class UserController {
     }
     
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    void webhook(@RequestBody Update update) {
+    void webhook2(@RequestBody Update update) {
         String inputMessage = update?.message?.text
 
         log.info("message received $inputMessage")
