@@ -165,7 +165,7 @@ class TelegramHandler {
 
         this.messageService.sendNotificationToTelegram("${question.questionText}", chatId)
         question?.answers?.each {
-            this.messageService.sendNotificationToTelegram("$it", chatId)
+            this.messageService.sendNotificationToTelegram("/$it", chatId)
         }
     }
 
