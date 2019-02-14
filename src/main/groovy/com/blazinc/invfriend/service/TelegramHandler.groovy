@@ -10,7 +10,6 @@ import com.blazinc.invfriend.model.telegramModel.Update
 import groovy.util.logging.Log
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Log
 @Service
@@ -76,7 +75,7 @@ class TelegramHandler {
 //OLD        if (!commandIsMessage && destinCodes.contains(message)) {
 
         if (destinCodes.contains(message)) {
-            chatId = params?.message?.getChat()?.getId()
+            //chatId = params?.message?.getChat()?.getId()
             String methodName = message + "Received"
             invokeMethod(methodName, params)
         }
