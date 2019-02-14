@@ -36,7 +36,7 @@ class TelegramHandler {
         message = message - '@invFriendBot'
 //        Boolean commandIsMessage = checkForMessageCommand(params, message)
         String userId = params?.message?.from?.id
-        User user = userRepository.findByChatId(userIdr)
+        User user = userRepository.findByChatId(userId)
 
         log.info("X" * 30)
         log.info("$userId es el id del usuario ${params.message.from.first_name}")
