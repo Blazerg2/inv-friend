@@ -28,7 +28,6 @@ class MessageService {
      * @param message to send
      */
 
-    @Async
     void sendNotificationToTelegram(String message, String chatId) {
 
         RestTemplate restTemplate = new RestTemplate()
