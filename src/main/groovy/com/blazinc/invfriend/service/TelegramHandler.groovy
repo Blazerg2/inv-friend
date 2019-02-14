@@ -45,10 +45,10 @@ class TelegramHandler {
         if (user) {
 
             Question question = questionRepository.findByQuestionNumber(user.question)
-            log.info(question?.answers?.toString())
+            log.info("${question?.answers}")
             log.info(message)
-            log.info((question?.answers?.contains(message) && !question?.isLast).toString())
-            log.info('x'*30)
+            log.info("${question?.answers?.contains(message) && !question?.isLast}")
+            log.info('x' * 30)
             if (question?.answers?.contains(message) && !question?.isLast) {
                 //correctAnswers.contains(message) && message != correctAnswers.last()) {
                 Boolean isCorrect = checkAnswer(question, message)
@@ -159,6 +159,9 @@ class TelegramHandler {
 
     void sendQuestion(String userId) {
         Question question = this.questionRepository.findByQuestionNumber(userRepository.findByChatId(userId)?.question)
+
+        log.info("sending question ${question?.questionText} to the user $userId")
+
         this.messageService.sendNotificationToTelegram("${question.questionText}", chatId)
         question?.answers?.each {
             this.messageService.sendNotificationToTelegram("$it", chatId)
