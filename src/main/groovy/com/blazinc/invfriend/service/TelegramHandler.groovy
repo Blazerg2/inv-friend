@@ -33,7 +33,9 @@ class TelegramHandler {
     private String chatId
 
     void messageReceiver(String message, Update params) {
-        if(message == null){message = 'none'}
+        if (message == null) {
+            message = 'none'
+        }
         message = message - '@invFriendBot'
 //        Boolean commandIsMessage = checkForMessageCommand(params, message)
         String userId = params?.message?.from?.id
@@ -169,6 +171,7 @@ class TelegramHandler {
 
         this.messageService.sendNotificationToTelegram("${question.questionText}", chatId)
         question?.answers?.each {
+            log.info("sending answer $it to the user $chatId")
             this.messageService.sendNotificationToTelegram("/$it", chatId)
         }
     }
