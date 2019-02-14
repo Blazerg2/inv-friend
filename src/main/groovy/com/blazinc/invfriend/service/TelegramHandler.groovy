@@ -42,18 +42,9 @@ class TelegramHandler {
         String chatId = userId
         User user = userRepository.findByChatId(userId)
 
-        log.info("X" * 30)
-        log.info("$userId es el id del usuario ${params.message.from.first_name}")
-        log.info("y el chat id es $chatId")
-        log.info("Y" * 30)
-
         if (user) {
 
             Question question = questionRepository.findByQuestionNumber(user.question)
-            log.info("${question?.answers}")
-            log.info(message)
-            log.info("${question?.answers?.contains(message) && !question?.isLast}")
-            log.info('x' * 30)
             if (question?.answers?.contains(message) && !question?.isLast) {
                 //correctAnswers.contains(message) && message != correctAnswers.last()) {
                 Boolean isCorrect = checkAnswer(question, message)
@@ -166,17 +157,13 @@ class TelegramHandler {
     void sendQuestion(String userId) {
         Question question = this.questionRepository.findByQuestionNumber(userRepository.findByChatId(userId)?.question)
 
-        log.info("sending question ${question?.questionText} to the user $userId")
-
         this.messageService.sendNotificationToTelegram("${question.questionText}", userId)
         question?.answers?.each {
-            log.info("sending answer $it to the user $userId")
             this.messageService.sendNotificationToTelegram("/$it", userId)
         }
     }
 
     void santatimeReceived(Update params) {
-        log.info('entramos')
         List<User> users = userRepository.findByGroup(params?.message?.chat?.title)
         List<User> users2 = users.clone() as List<User>
 
@@ -195,7 +182,6 @@ class TelegramHandler {
 
 
                     element?.partner = new Partner(first_name: users2[0]?.userName, chatId: users2[0]?.chatId)
-                    log.info("a ${element?.userName} le corresponde regalar a ${users2[0]?.userName}")
                     users2?.remove(0)
                     worked = true
                 }
