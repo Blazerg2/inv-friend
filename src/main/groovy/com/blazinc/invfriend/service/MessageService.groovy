@@ -6,6 +6,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestTemplate
  * this service connects to a telegram by sending messages
  */
 @Service
+@Transactional
 class MessageService {
 
     @Autowired

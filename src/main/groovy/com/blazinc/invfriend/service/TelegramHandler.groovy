@@ -10,9 +10,11 @@ import com.blazinc.invfriend.model.telegramModel.Update
 import groovy.util.logging.Log
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Log
 @Service
+@Transactional
 class TelegramHandler {
 
     @Autowired
@@ -25,8 +27,8 @@ class TelegramHandler {
     QuestionRepository questionRepository
 
 //    private static final def OLDdestinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants', 'message']
-    private static final def destinCodes = ['start']
-    private static final def correctAnswers = ['2008', 'Take_on_me', '2018', '2k14', 'Loulogio', '8', 'Mario', '2', '4']
+    private static final def destinCodes = ['start', 'restart']
+    // private static final def correctAnswers = ['2008', 'Take_on_me', '2018', '2k14', 'Loulogio', '8', 'Mario', '2', '4']
 
     private String chatId
 
@@ -34,32 +36,60 @@ class TelegramHandler {
         message = message - '@invFriendBot'
 //        Boolean commandIsMessage = checkForMessageCommand(params, message)
         String userId = params?.message?.from?.id
+        User user = userRepository.findByChatId(userIdr)
 
         log.info("X" * 30)
-        log.info("${message in correctAnswers}")
+        log.info("$userId es el id del usuario ${params.message.from.first_name}")
         log.info("Y" * 30)
 
-        if (correctAnswers.contains(message) && message != correctAnswers.last()) {
-            User user = userRepository.findByUserName(params?.message?.from?.first_name)
-            user.question++
-            userRepository.save(user)
-            this.messageService.sendNotificationToTelegram("¡Correcto!, siguiente pregunta: ", chatId)
-            sendQuestion(userId)
-        } else if (correctAnswers.contains(message) && message == correctAnswers.last()) {
-            this.messageService.sendNotificationToTelegram("Felicidades, has resuelto el acertijo, nos vemos el viernes a las cinco en la posición indicada #nvidiaoff", chatId)
-            this.messageService.sendNotificationToTelegram("https://drive.google.com/open?id=1dqJRH_UZuxuanr2A-iZlA1Y_1yM7GyWk", chatId)
-        }
+        if (user) {
 
+            Question question = questionRepository.findByQuestionNumber(user.question)
+
+            if (question?.answers?.contains(message) && !question?.isLast) {
+                //correctAnswers.contains(message) && message != correctAnswers.last()) {
+                Boolean isCorrect = checkAnswer(question, message)
+                if (isCorrect) {
+                    user.question++
+                    userRepository.save(user)
+                    this.messageService.sendNotificationToTelegram("¡Correcto!, siguiente pregunta: ", chatId)
+                    sendQuestion(userId)
+                } else {
+                    user.question = 0
+                    userRepository.save(user)
+                    this.messageService.sendNotificationToTelegram("¡Incorrecto!", chatId)
+                    sendQuestion(userId)
+                }
+
+
+            } else if (question?.answers?.contains(message) && question?.isLast) {
+                Boolean isCorrect = checkAnswer(question, message)
+                if (!isCorrect) {
+                    user.question = 0
+                    userRepository.save(user)
+                    this.messageService.sendNotificationToTelegram("¡Incorrecto!", chatId)
+                    sendQuestion(userId)
+                } else {
+                    this.messageService.sendNotificationToTelegram("Felicidades, has resuelto el acertijo, nos vemos el viernes a las cinco en la posición indicada #nvidiaoff", chatId)
+                    this.messageService.sendNotificationToTelegram("https://drive.google.com/open?id=1dqJRH_UZuxuanr2A-iZlA1Y_1yM7GyWk", chatId)
+                }
+            }
+        }
 //OLD        if (!commandIsMessage && destinCodes.contains(message)) {
 
         if (destinCodes.contains(message)) {
             chatId = params?.message?.getChat()?.getId()
             String methodName = message + "Received"
             invokeMethod(methodName, params)
-        } else if (!correctAnswers.contains(message)) {
-            this.messageService.sendNotificationToTelegram("¡incorrecto!", chatId)
-            sendQuestion(userId)
         }
+//        else if (!correctAnswers.contains(message)) {
+//            this.messageService.sendNotificationToTelegram("¡incorrecto!", chatId)
+//            sendQuestion(userId)
+//        }
+    }
+
+    Boolean checkAnswer(Question question, String userAnswer) {
+        question.correctAnswer == userAnswer
     }
 
     Boolean checkForMessageCommand(Update params, String message) {
@@ -115,6 +145,13 @@ class TelegramHandler {
         }
 
 
+    }
+
+    void restartReceived(Update params) {
+        String userId = params?.message?.from?.id
+        User user = this.userRepository.findByChatId(userId)
+        user.question = 0
+        userRepository.save(user)
     }
 
     void sendQuestion(String userId) {
