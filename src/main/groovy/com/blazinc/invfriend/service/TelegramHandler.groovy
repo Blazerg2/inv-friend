@@ -9,12 +9,14 @@ import com.blazinc.invfriend.model.telegramModel.Update
 
 import groovy.util.logging.Log
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Log
 @Service
 @Transactional
+@Async
 class TelegramHandler {
 
     @Autowired
