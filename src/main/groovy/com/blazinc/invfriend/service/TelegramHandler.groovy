@@ -9,7 +9,6 @@ import com.blazinc.invfriend.model.telegramModel.Update
 
 import groovy.util.logging.Log
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -33,7 +32,6 @@ class TelegramHandler {
 
     private String chatId
 
-    @Async
     void messageReceiver(String message, Update params) {
         if (message == null) {
             message = 'none'
@@ -98,12 +96,10 @@ class TelegramHandler {
 //        }
     }
 
-    @Async
     Boolean checkAnswer(Question question, String userAnswer) {
         question.correctAnswer == userAnswer
     }
 
-    @Async
     Boolean checkForMessageCommand(Update params, String message) {
         if (message?.size() > 7 && message?.substring(0, 7) == 'message') {
             messageReceived(params, message?.substring(7))
@@ -140,7 +136,6 @@ class TelegramHandler {
 //            this.messageService.sendNotificationToTelegram("Greetings!, use /getHelp to know more about the bot", chatId)
 //        }
 //    }
-    @Async
     void startReceived(Update params) {
         String userId = params?.message?.from?.id
 
@@ -160,7 +155,6 @@ class TelegramHandler {
 
     }
 
-    @Async
     void restartReceived(Update params) {
         String userId = params?.message?.from?.id
         User user = this.userRepository.findByChatId(userId)
@@ -169,7 +163,6 @@ class TelegramHandler {
         sendQuestion(userId)
     }
 
-    @Async
     void sendQuestion(String userId) {
         Question question = this.questionRepository.findByQuestionNumber(userRepository.findByChatId(userId)?.question)
 
@@ -222,7 +215,6 @@ class TelegramHandler {
         this.messageService.sendNotificationToTelegram("$names ", chatId)
     }
 
-    @Async
     void messageReceived(Update params, String message) {
         if (params?.message?.chat?.type != 'private') {
             this.messageService.sendNotificationToTelegram("You can contact your invisible friend but the /message command must be sent through a private message to me", chatId)
