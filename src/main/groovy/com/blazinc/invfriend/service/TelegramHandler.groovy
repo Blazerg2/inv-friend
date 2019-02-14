@@ -30,7 +30,7 @@ class TelegramHandler {
     private static final def destinCodes = ['start']
     // private static final def correctAnswers = ['2008', 'Take_on_me', '2018', '2k14', 'Loulogio', '8', 'Mario', '2', '4']
 
-    private String chatId
+
 
     void messageReceiver(String message, Update params) {
         if (message == null) {
@@ -39,7 +39,7 @@ class TelegramHandler {
         message = message - '@invFriendBot'
 //        Boolean commandIsMessage = checkForMessageCommand(params, message)
         String userId = params?.message?.from?.id
-        chatId = userId
+        String chatId = userId
         User user = userRepository.findByChatId(userId)
 
         log.info("X" * 30)
