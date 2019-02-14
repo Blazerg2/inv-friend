@@ -155,7 +155,7 @@ class TelegramHandler {
 
     void sendQuestion(String userId) {
         Question question = this.questionRepository.findByQuestionNumber(userRepository.findByChatId(userId)?.question)
-        this.messageService.sendNotificationToTelegram("${question.questionText}", userId)
+        this.messageService.sendQuestionToTelegram("${question.questionText}", userId)
         log.info("enviado pregunta ${question.questionText} to the user $userId")
         question?.answers?.each {
             this.messageService.sendNotificationToTelegram("/$it", userId)
