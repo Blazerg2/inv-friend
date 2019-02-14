@@ -134,7 +134,7 @@ class TelegramHandler {
             if (!userRepository.findByChatId(userId)) {
                 userRepository.save(user)
             }
-            this.messageService.sendQuestionToTelegram("Para conseguir el último fragmento del QR deberás demostrar una gran determinación (además de un poco de conocimiento sobre el clan y la TLP) y responder correctamente a todas las preguntas. ¡Buena suerte con el juego!", userId)
+            this.messageService.sendQuestionToTelegram("Para conseguir el último fragmento del QR deberás demostrar una gran determinación (además de un poco de conocimiento sobre el clan y la TLP) y responder correctamente a todas las preguntas. ¡Buena suerte con el juego! (aunque recuerda que si fallas una pregunta volverás al principio)", userId)
             this.sendQuestion(userId)
         } else {
             restartReceived(params)
@@ -148,6 +148,7 @@ class TelegramHandler {
         User user = this.userRepository.findByChatId(userId)
         user.question = 0
         userRepository.save(user)
+        this.messageService.sendQuestionToTelegram("Para conseguir el último fragmento del QR deberás demostrar una gran determinación (además de un poco de conocimiento sobre el clan y la TLP) y responder correctamente a todas las preguntas. ¡Buena suerte con el juego! (aunque recuerda que si fallas una pregunta volverás al principio)", userId)
         sendQuestion(userId)
     }
 
