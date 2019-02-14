@@ -27,7 +27,7 @@ class TelegramHandler {
     QuestionRepository questionRepository
 
 //    private static final def OLDdestinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants', 'message']
-    private static final def destinCodes = ['start', 'restart']
+    private static final def destinCodes = ['start']
     // private static final def correctAnswers = ['2008', 'Take_on_me', '2018', '2k14', 'Loulogio', '8', 'Mario', '2', '4']
 
     private String chatId
@@ -145,6 +145,7 @@ class TelegramHandler {
             this.messageService.sendNotificationToTelegram("El juego comienza aquí, debes seleccionar la respuesta correcta para recibir la siguiente pregunta.", chatId)
             this.sendQuestion(userId)
         } else {
+            restartReceived(params)
             this.messageService.sendNotificationToTelegram("¡Buena suerte con el juego!", chatId)
         }
 
