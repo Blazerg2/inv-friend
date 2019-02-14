@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @Log
 @Service
-@Transactional
 class TelegramHandler {
 
     @Autowired
@@ -80,6 +79,8 @@ class TelegramHandler {
             chatId = params?.message?.getChat()?.getId()
             String methodName = message + "Received"
             invokeMethod(methodName, params)
+        }else{
+            this.messageService.sendNotificationToTelegram("¡No reconozco ese comando!", chatId)
         }
 //        else if (!correctAnswers.contains(message)) {
 //            this.messageService.sendNotificationToTelegram("¡incorrecto!", chatId)
@@ -156,8 +157,8 @@ class TelegramHandler {
 
     void sendQuestion(String userId) {
         Question question = this.questionRepository.findByQuestionNumber(userRepository.findByChatId(userId)?.question)
-
         this.messageService.sendNotificationToTelegram("${question.questionText}", userId)
+        log.info("enviado pregunta ${question.questionText} to the user $userId")
         question?.answers?.each {
             this.messageService.sendNotificationToTelegram("/$it", userId)
         }
