@@ -6,6 +6,7 @@ import org.springframework.core.env.Environment
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.LinkedMultiValueMap
@@ -27,6 +28,8 @@ class MessageService {
      * It sends a message to a telegram bot with a specific chatId
      * @param message to send
      */
+
+    @Async
     void sendNotificationToTelegram(String message, String chatId) {
 
         RestTemplate restTemplate = new RestTemplate()
@@ -37,10 +40,6 @@ class MessageService {
         MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>()
         params.add("chat_id", chatId)
         params.add("text", message)
-
-        log.info("z"*30)
-        log.info("el chat_id que se manda en el POST a telegram es $chatId")
-        log.info("z"*30)
 
         HttpEntity<LinkedMultiValueMap<String, Object>> request = new HttpEntity<>(params, headers)
 
