@@ -40,7 +40,8 @@ class MessageService {
 
         //OLD
         restTemplate.postForEntity(
-                'https://api.telegram.org/bot794682489:AAH5gp3ex-7uGWBvJwAU6Po6--6IlcJHGcA/sendMessage',
+//                794682489:AAH5gp3ex-7uGWBvJwAU6Po6--6IlcJHGcA
+                'https://api.telegram.org/bot751728179:AAFJRaz8sUequ_MgDoxhfSUQSIOWiXjCj7A/sendMessage',
                 request, String.class
         )
     }
