@@ -41,7 +41,7 @@ class UserController {
         'Hello world, I am alive!!!!!!'
     }
 
-    @RequestMapping(value = "/webhook", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     void webhook(@RequestBody Update update) {
         String inputMessage = update?.message?.text
 
@@ -49,34 +49,6 @@ class UserController {
         log.info("$update")
 
         this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    Callable<String> webhook2(@RequestBody Update update) {
-//        String inputMessage = update?.message?.text
-//
-//        log.info("message received $inputMessage")
-//        log.info("$update")
-//
-//        this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
-        Callable<String> asyncTask = {
-            try {
-                System.out.println(" WAITING STARTED:" + new Date());
-                String inputMessage = update?.message?.text
-
-                log.info("message received $inputMessage")
-                log.info("$update")
-
-                this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
-                Thread.sleep(5000);
-                System.out.println(" WAITING COMPLETED:" + new Date());
-                return "Return";//Send the result back to View Return.jsp
-            } catch (InterruptedException iexe) {
-                //log exception
-                return "ReturnFail";
-            }
-        }
-        return asyncTask;
     }
 
 //    @RequestMapping(value="/sleep")
