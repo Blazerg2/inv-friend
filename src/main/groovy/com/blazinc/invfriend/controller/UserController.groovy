@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.scheduling.annotation.Async
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -39,6 +40,7 @@ class UserController {
         'Hello world, I am alive!!!!!!'
     }
 
+    @Async
     @RequestMapping(value = "/webhook", method = RequestMethod.POST)
     void webhook(@RequestBody Update update) {
         String inputMessage = update?.message?.text
