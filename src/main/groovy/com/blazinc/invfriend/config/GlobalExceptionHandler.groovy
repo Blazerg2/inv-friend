@@ -20,13 +20,13 @@ class GlobalExceptionHandler {
      * this method catches every exception to send a custom error json response
      */
 //    //tODO FIX THIS check for 403
-   // @ExceptionHandler(Exception)
-    //@ResponseStatus(code = HttpStatus.OK, reason = 'invalid command')
-    //void everyException(Exception e) {
-      //  log.info("INVALID COMMAND RECEIVED $e.message")
-        //log.info('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-        //log.info("$e.stackTrace")
-    //}
+    @ExceptionHandler(Exception)
+    @ResponseStatus(code = HttpStatus.OK, reason = 'invalid command')
+    void everyException(Exception e) {
+        log.info("INVALID COMMAND RECEIVED $e.message")
+        log.info('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+        log.info("$e.stackTrace")
+    }
 
 //    /**
 //     * This method catches the EntityNotFoundException that is sent if our mongodb return no data
