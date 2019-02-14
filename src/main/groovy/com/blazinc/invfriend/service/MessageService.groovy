@@ -6,6 +6,7 @@ import org.springframework.core.env.Environment
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.LinkedMultiValueMap
@@ -27,6 +28,7 @@ class MessageService {
      * It sends a message to a telegram bot with a specific chatId
      * @param message to send
      */
+    @Async
     void sendNotificationToTelegram(String message, String chatId) {
 
         RestTemplate restTemplate = new RestTemplate()
