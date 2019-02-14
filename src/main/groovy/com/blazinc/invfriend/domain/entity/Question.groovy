@@ -11,4 +11,5 @@ class Question {
     String questionText
     String correctAnswer
     List<String> answers
+    Boolean isLast
 }

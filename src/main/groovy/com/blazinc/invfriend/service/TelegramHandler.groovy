@@ -10,6 +10,7 @@ import com.blazinc.invfriend.model.telegramModel.Update
 import groovy.util.logging.Log
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Log
 @Service
@@ -26,40 +27,67 @@ class TelegramHandler {
 
 //    private static final def OLDdestinCodes = ['gethelp', 'join', 'start', 'santatime', 'participants', 'message']
     private static final def destinCodes = ['start']
-    private static final def correctAnswers = ['2008', 'Take_on_me', '2018', '2k14', 'Loulogio', '8', 'Mario', '2', '4']
+    // private static final def correctAnswers = ['2008', 'Take_on_me', '2018', '2k14', 'Loulogio', '8', 'Mario', '2', '4']
 
-    private String chatId
+
 
     void messageReceiver(String message, Update params) {
+        if (message == null) {
+            message = 'none'
+        }
         message = message - '@invFriendBot'
 //        Boolean commandIsMessage = checkForMessageCommand(params, message)
         String userId = params?.message?.from?.id
+        String chatId = userId
+        User user = userRepository.findByChatId(userId)
 
-        log.info("X" * 30)
-        log.info("${message in correctAnswers}")
-        log.info("Y" * 30)
+        if (user) {
 
-        if (correctAnswers.contains(message) && message != correctAnswers.last()) {
-            User user = userRepository.findByUserName(params?.message?.from?.first_name)
-            user.question++
-            userRepository.save(user)
-            this.messageService.sendNotificationToTelegram("¡Correcto!, siguiente pregunta: ", chatId)
-            sendQuestion(userId)
-        } else if (correctAnswers.contains(message) && message == correctAnswers.last()) {
-            this.messageService.sendNotificationToTelegram("Felicidades, has resuelto el acertijo, nos vemos el viernes a las cinco en la posición indicada #nvidiaoff", chatId)
-            this.messageService.sendNotificationToTelegram("https://drive.google.com/open?id=1dqJRH_UZuxuanr2A-iZlA1Y_1yM7GyWk", chatId)
+            Question question = questionRepository.findByQuestionNumber(user.question)
+            if (question?.answers?.contains(message) && !question?.isLast) {
+                //correctAnswers.contains(message) && message != correctAnswers.last()) {
+                Boolean isCorrect = checkAnswer(question, message)
+                if (isCorrect) {
+                    user.question++
+                    userRepository.save(user)
+                    this.messageService.sendNotificationToTelegram("¡Correcto!, siguiente pregunta: ", chatId)
+                    sendQuestion(userId)
+                } else {
+                    user.question = 0
+                    userRepository.save(user)
+                    this.messageService.sendNotificationToTelegram("¡Incorrecto!", chatId)
+                    sendQuestion(userId)
+                }
+
+
+            } else if (question?.answers?.contains(message) && question?.isLast) {
+                Boolean isCorrect = checkAnswer(question, message)
+                if (!isCorrect) {
+                    user.question = 0
+                    userRepository.save(user)
+                    this.messageService.sendNotificationToTelegram("¡Incorrecto!", chatId)
+                    sendQuestion(userId)
+                } else {
+                    this.messageService.sendNotificationToTelegram("Felicidades, has resuelto el acertijo, nos vemos el viernes a las cinco en la posición indicada #nvidiaoff", chatId)
+                    this.messageService.sendNotificationToTelegram("https://drive.google.com/open?id=1dqJRH_UZuxuanr2A-iZlA1Y_1yM7GyWk", chatId)
+                }
+            }
         }
-
 //OLD        if (!commandIsMessage && destinCodes.contains(message)) {
 
         if (destinCodes.contains(message)) {
             chatId = params?.message?.getChat()?.getId()
             String methodName = message + "Received"
             invokeMethod(methodName, params)
-        } else if (!correctAnswers.contains(message)) {
-            this.messageService.sendNotificationToTelegram("¡incorrecto!", chatId)
-            sendQuestion(userId)
         }
+//        else if (!correctAnswers.contains(message)) {
+//            this.messageService.sendNotificationToTelegram("¡incorrecto!", chatId)
+//            sendQuestion(userId)
+//        }
+    }
+
+    Boolean checkAnswer(Question question, String userAnswer) {
+        question.correctAnswer == userAnswer
     }
 
     Boolean checkForMessageCommand(Update params, String message) {
@@ -98,7 +126,6 @@ class TelegramHandler {
 //            this.messageService.sendNotificationToTelegram("Greetings!, use /getHelp to know more about the bot", chatId)
 //        }
 //    }
-
     void startReceived(Update params) {
         String userId = params?.message?.from?.id
 
@@ -111,22 +138,31 @@ class TelegramHandler {
             this.messageService.sendNotificationToTelegram("El juego comienza aquí, debes seleccionar la respuesta correcta para recibir la siguiente pregunta.", chatId)
             this.sendQuestion(userId)
         } else {
-            this.messageService.sendNotificationToTelegram("¡Buena suerte con el juego!", chatId)
+            restartReceived(params)
+            this.messageService.sendNotificationToTelegram("¡Buena suerte con el juego!", userId)
         }
 
 
+    }
+
+    void restartReceived(Update params) {
+        String userId = params?.message?.from?.id
+        User user = this.userRepository.findByChatId(userId)
+        user.question = 0
+        userRepository.save(user)
+        sendQuestion(userId)
     }
 
     void sendQuestion(String userId) {
         Question question = this.questionRepository.findByQuestionNumber(userRepository.findByChatId(userId)?.question)
-        this.messageService.sendNotificationToTelegram("${question.questionText}", chatId)
+        this.messageService.sendQuestionToTelegram("${question.questionText}", userId)
+        log.info("enviado pregunta ${question.questionText} to the user $userId")
         question?.answers?.each {
-            this.messageService.sendNotificationToTelegram("$it", chatId)
+            this.messageService.sendNotificationToTelegram("/$it", userId)
         }
     }
 
     void santatimeReceived(Update params) {
-        log.info('entramos')
         List<User> users = userRepository.findByGroup(params?.message?.chat?.title)
         List<User> users2 = users.clone() as List<User>
 
@@ -145,7 +181,6 @@ class TelegramHandler {
 
 
                     element?.partner = new Partner(first_name: users2[0]?.userName, chatId: users2[0]?.chatId)
-                    log.info("a ${element?.userName} le corresponde regalar a ${users2[0]?.userName}")
                     users2?.remove(0)
                     worked = true
                 }
