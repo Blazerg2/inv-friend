@@ -155,6 +155,7 @@ class TelegramHandler {
         User user = this.userRepository.findByChatId(userId)
         user.question = 0
         userRepository.save(user)
+        sendQuestion(userId)
     }
 
     void sendQuestion(String userId) {
