@@ -149,7 +149,7 @@ class TelegramHandler {
             this.sendQuestion(userId)
         } else {
             restartReceived(params)
-            this.messageService.sendNotificationToTelegram("¡Buena suerte con el juego!", chatId)
+            this.messageService.sendNotificationToTelegram("¡Buena suerte con el juego!", userId)
         }
 
 
@@ -168,10 +168,10 @@ class TelegramHandler {
 
         log.info("sending question ${question?.questionText} to the user $userId")
 
-        this.messageService.sendNotificationToTelegram("${question.questionText}", chatId)
+        this.messageService.sendNotificationToTelegram("${question.questionText}", userId)
         question?.answers?.each {
-            log.info("sending answer $it to the user $chatId")
-            this.messageService.sendNotificationToTelegram("/$it", chatId)
+            log.info("sending answer $it to the user $userId")
+            this.messageService.sendNotificationToTelegram("/$it", userId)
         }
     }
 
