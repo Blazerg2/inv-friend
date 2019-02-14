@@ -50,7 +50,8 @@ class UserController {
 
         this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
     }
-    
+
+    @Async
     @RequestMapping(value = "/", method = RequestMethod.POST)
     void webhook2(@RequestBody Update update) {
         String inputMessage = update?.message?.text
