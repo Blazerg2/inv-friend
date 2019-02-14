@@ -41,6 +41,7 @@ class TelegramHandler {
 
         log.info("X" * 30)
         log.info("$userId es el id del usuario ${params.message.from.first_name}")
+        log.info("y el chat id es $chatId")
         log.info("Y" * 30)
 
         if (user) {
