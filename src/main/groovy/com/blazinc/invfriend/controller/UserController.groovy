@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.view.RedirectView
 import springfox.documentation.annotations.ApiIgnore
 
+import java.util.concurrent.Callable
+
 @Log
 @Api(value = 'partners', description = 'Just a custom api to document the secret santa telegram project')
 @RestController()
@@ -35,7 +37,7 @@ class UserController {
     ])
 
     @GetMapping(value = '/isAlive')
-    String isAlive(){
+    String isAlive() {
         'Hello world, I am alive!!!!!!'
     }
 
@@ -50,14 +52,52 @@ class UserController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    void webhook2(@RequestBody Update update) {
-        String inputMessage = update?.message?.text
+    Callable<String> webhook2(@RequestBody Update update) {
+//        String inputMessage = update?.message?.text
+//
+//        log.info("message received $inputMessage")
+//        log.info("$update")
+//
+//        this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
+        Callable<String> asyncTask = {
+            try {
+                System.out.println(" WAITING STARTED:" + new Date());
+                String inputMessage = update?.message?.text
 
-        log.info("message received $inputMessage")
-        log.info("$update")
+                log.info("message received $inputMessage")
+                log.info("$update")
 
-        this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
+                this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
+                Thread.sleep(5000);
+                System.out.println(" WAITING COMPLETED:" + new Date());
+                return "Return";//Send the result back to View Return.jsp
+            } catch (InterruptedException iexe) {
+                //log exception
+                return "ReturnFail";
+            }
+        }
+        return asyncTask;
     }
+
+//    @RequestMapping(value="/sleep")
+//    Callable<String> myControllerMethod() {
+//        Callable<String> asyncTask = { try {
+//            System.out.println(" WAITING STARTED:"+new Date());
+//            String inputMessage = update?.message?.text
+//
+//            log.info("message received $inputMessage")
+//            log.info("$update")
+//
+//            this.telegramHandler.messageReceiver(inputMessage?.substring(1), update)
+//            Thread.sleep(5000);
+//            System.out.println(" WAITING COMPLETED:"+new Date());
+//            return "Return";//Send the result back to View Return.jsp
+//        } catch(InterruptedException iexe) {
+//            //log exception
+//            return "ReturnFail";
+//        }}
+//        return asyncTask;
+//    }
 
 //    @ApiIgnore
 //    @GetMapping(value = '/')
