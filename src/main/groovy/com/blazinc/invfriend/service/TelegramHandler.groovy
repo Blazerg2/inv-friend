@@ -32,7 +32,7 @@ class TelegramHandler {
 
     private String chatId
 
-    void messageReceiver(String message, Update params) {
+    void messageReceiver(String message = 'none', Update params) {
         message = message - '@invFriendBot'
 //        Boolean commandIsMessage = checkForMessageCommand(params, message)
         String userId = params?.message?.from?.id
