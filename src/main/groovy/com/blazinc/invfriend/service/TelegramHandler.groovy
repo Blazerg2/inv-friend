@@ -45,7 +45,10 @@ class TelegramHandler {
         if (user) {
 
             Question question = questionRepository.findByQuestionNumber(user.question)
-
+            log.info(question?.answers?.toString())
+            log.info(message)
+            log.info((question?.answers?.contains(message) && !question?.isLast).toString())
+            log.info('x'*30)
             if (question?.answers?.contains(message) && !question?.isLast) {
                 //correctAnswers.contains(message) && message != correctAnswers.last()) {
                 Boolean isCorrect = checkAnswer(question, message)
