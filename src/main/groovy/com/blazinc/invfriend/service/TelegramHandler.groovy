@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional
 @Log
 @Service
 @Transactional
-@Async
 class TelegramHandler {
 
     @Autowired
@@ -34,6 +33,7 @@ class TelegramHandler {
 
     private String chatId
 
+    @Async
     void messageReceiver(String message, Update params) {
         if (message == null) {
             message = 'none'
