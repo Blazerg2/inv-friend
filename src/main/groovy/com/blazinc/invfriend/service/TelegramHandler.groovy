@@ -79,8 +79,6 @@ class TelegramHandler {
             chatId = params?.message?.getChat()?.getId()
             String methodName = message + "Received"
             invokeMethod(methodName, params)
-        }else{
-            this.messageService.sendNotificationToTelegram("¡No reconozco ese comando!", chatId)
         }
 //        else if (!correctAnswers.contains(message)) {
 //            this.messageService.sendNotificationToTelegram("¡incorrecto!", chatId)
