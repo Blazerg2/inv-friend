@@ -67,7 +67,7 @@ class TelegramHandler {
                     this.messageService.sendNotificationToTelegram("¡Incorrecto!", chatId)
                     sendQuestion(userId)
                 } else {
-                    this.messageService.sendNotificationToTelegram("Felicidades, has resuelto el acertijo, nos vemos el viernes a las cinco en la posición indicada #nvidiaoff", chatId)
+                    this.messageService.sendNotificationToTelegram("Felicidades, has resuelto el acertijo, nos vemos el miércoles a las siete en la posición indicada #nvidiaoff", chatId)
                     this.messageService.sendNotificationToTelegram("https://drive.google.com/open?id=1dqJRH_UZuxuanr2A-iZlA1Y_1yM7GyWk", chatId)
                 }
             }
